@@ -7,6 +7,7 @@
 #include "Test_VtListCtrlEx_Non_Virtual.h"
 #include "Test_VtListCtrlEx_Non_VirtualDlg.h"
 
+#include <bitset>
 #include "Functions.h"
 
 #ifdef _DEBUG
@@ -70,6 +71,8 @@ BEGIN_MESSAGE_MAP(CTestVtListCtrlExNonVirtualDlg, CDialogEx)
 	ON_WM_WINDOWPOSCHANGED()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, &CTestVtListCtrlExNonVirtualDlg::OnLvnItemChangedList)
 	ON_REGISTERED_MESSAGE(Message_CVtListCtrlEx, &CTestVtListCtrlExNonVirtualDlg::on_message_CVtListCtrlEx)
+	ON_BN_CLICKED(IDOK, &CTestVtListCtrlExNonVirtualDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDCANCEL, &CTestVtListCtrlExNonVirtualDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -112,6 +115,10 @@ BOOL CTestVtListCtrlExNonVirtualDlg::OnInitDialog()
 
 	init_list();
 
+	std::bitset<320> b(0x00000001);
+	b.set(319, 1);
+	TRACE(_T("bitset: size = %d, value = %S\n"), b.size(), b.to_string().c_str());
+
 	RestoreWindowPosition(&theApp, this);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -119,18 +126,22 @@ BOOL CTestVtListCtrlExNonVirtualDlg::OnInitDialog()
 
 void CTestVtListCtrlExNonVirtualDlg::init_list()
 {
+	m_list.set_color_theme(CSCColorTheme::color_theme_dark_gray);
 	//m_list.set_use_virtual_list(false);
-	m_list.SetExtendedStyle(LVS_EX_CHECKBOXES);// | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_list.SetExtendedStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
 	//m_list.InsertColumn(0, _T("기능/옵션"), LVCFMT_LEFT, 100);
 	//m_list.InsertItem(0, _T("마우스/키보드 제어"));
 
+	m_list.set_header_height(32);
 	m_list.set_line_height(24);
 
-	m_list.set_headings(_T("기능/옵션,100;설명,250;옵션 ID,150;옵션 Value,100"));
+	m_list.set_headings(_T("기능/옵션,100;설명,250;옵션 ID,150;옵션 Value기능/옵션기능/옵션기능/옵션기능/옵션,100"));
 	m_list.insert_item(-1, -1, _T("마우스/키보드 제어"), _T("마우스 / 키보드 제어를 사용합니다."), _T("_RCFunctionRight_CONTROL"), _T("0x00000001"));
 	m_list.insert_item(-1, -1, _T("마우스/키보드 제어"), _T("마우스 / 키보드 제어를 사용합니다."), _T("_RCFunctionRight_CONTROL"), _T("0x00000001"));
 	m_list.insert_item(-1, -1, _T("마우스/키보드 제어"), _T("마우스 / 키보드 제어를 사용합니다."), _T("_RCFunctionRight_CONTROL"), _T("0x00000001"));
+
+	m_list.load_column_width(&theApp, _T("list"));
 }
 
 void CTestVtListCtrlExNonVirtualDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -200,8 +211,8 @@ void CTestVtListCtrlExNonVirtualDlg::OnLvnItemChangedList(NMHDR* pNMHDR, LRESULT
 	UINT old_check = pNMLV->uOldState & LVIS_STATEIMAGEMASK;
 	UINT new_check = pNMLV->uNewState & LVIS_STATEIMAGEMASK;
 
-	TRACE(_T("OnLvnItemChangedList: item = %d, sub = %d, old = %d, new = %d, old_check = %d, new_check = %d\n"),
-								pNMLV->iItem, pNMLV->iSubItem, pNMLV->uOldState, pNMLV->uNewState, old_check, new_check);
+	//TRACE(_T("OnLvnItemChangedList: item = %d, sub = %d, old = %d, new = %d, old_check = %d, new_check = %d\n"),
+	//							pNMLV->iItem, pNMLV->iSubItem, pNMLV->uOldState, pNMLV->uNewState, old_check, new_check);
 	if (pNMLV->uChanged & LVIF_STATE) // item state has been changed
 	{
 		switch (pNMLV->uNewState & LVIS_STATEIMAGEMASK)
@@ -235,4 +246,15 @@ LRESULT CTestVtListCtrlExNonVirtualDlg::on_message_CVtListCtrlEx(WPARAM wParam, 
 	TRACE(_T("checked list = %s\n"), get_list_str(dq));
 
 	return 0;
+}
+void CTestVtListCtrlExNonVirtualDlg::OnBnClickedOk()
+{
+}
+
+void CTestVtListCtrlExNonVirtualDlg::OnBnClickedCancel()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_list.save_column_width(&theApp, _T("list"));
+
+	CDialogEx::OnCancel();
 }

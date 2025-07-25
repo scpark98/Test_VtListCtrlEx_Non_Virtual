@@ -42,4 +42,6 @@ public:
 	CVtListCtrlEx m_list;
 	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
 	afx_msg void OnLvnItemChangedList(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedCancel();
 };
