@@ -142,6 +142,8 @@ void CTestVtListCtrlExNonVirtualDlg::init_list()
 	m_list.insert_item(-1, -1, _T("마우스/키보드 제어"), _T("마우스 / 키보드 제어를 사용합니다."), _T("_RCFunctionRight_CONTROL"), _T("0x00000001"));
 
 	m_list.load_column_width(&theApp, _T("list"));
+
+	m_list.allow_edit();
 }
 
 void CTestVtListCtrlExNonVirtualDlg::OnSysCommand(UINT nID, LPARAM lParam)
