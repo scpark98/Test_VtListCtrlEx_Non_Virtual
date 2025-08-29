@@ -127,8 +127,9 @@ BOOL CTestVtListCtrlExNonVirtualDlg::OnInitDialog()
 void CTestVtListCtrlExNonVirtualDlg::init_list()
 {
 	m_list.set_color_theme(CSCColorTheme::color_theme_dark_gray);
+	//m_list.set_color_theme(CSCColorTheme::color_theme_dark);
 	//m_list.set_use_virtual_list(false);
-	m_list.SetExtendedStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_list.SetExtendedStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);// | LVS_EX_GRIDLINES);
 
 	//m_list.InsertColumn(0, _T("기능/옵션"), LVCFMT_LEFT, 100);
 	//m_list.InsertItem(0, _T("마우스/키보드 제어"));
